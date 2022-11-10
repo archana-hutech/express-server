@@ -1,35 +1,43 @@
+const { where } = require('sequelize');
 const { Users } = require('../model/db');
 const db = require('../model/db');
 const users = require('../model/users');
 
-// exports.createUser = async (req, res) => {
-//     const { name, email, phone, password } = req.body;
-//     const { rows } = await db.query(
-//         "INSERT INTO users (name, email, phone, password) VALUES ($1, $2, $3, $4)",
-//         [name, email, phone, password]
-//     );
-// }
-
 async function addUser(users) {
     try {
-        console.log("users", users);
         const usersInfo = await db.Users.create(users)
-        console.log(usersInfo);
-        return ({ success: usersInfo?.length > 0, statusCode: usersInfo?.length > 0 ? 200 : 404, message: usersInfo.length > 0 ? "User found" : "No user found" });
+        return usersInfo.get();
     } catch (error) {
-        //console.log(error);
         return ({ success: false, statusCode: 500, message: "internal server error", error: error.message });
     }
 }
 
 async function getUser(id = null) {
     try {
-        const users = await db.Users.findAll({ where: id ? { id } : {} })
-        return ({ success: users?.length > 0, statusCode: users?.length > 0 ? 200 : 404, message: users.length > 0 ? "User found" : "No user found" });
+        const usersdetails = await db.Users.findAll({ where: id ? { id } : {} });
+        return usersdetails;
+    } catch (error) {
+        //console.log(error);
+        return ({ success: false, statusCode: 500, message: "internal server error", error: error.message });
+    }
+}
+
+async function updateUser(id, user) {
+    try {
+        const updatedUser = await db.Users.update(user, { where: { id } });
+        return user;
     } catch (error) {
         return ({ success: false, statusCode: 500, message: "internal server error", error: error.message });
     }
 }
 
-module.exports = { addUser, getUser };
+async function deletedUser(id) {
+    try {
+        const delUser = await db.Users.destroy({ where: { id } });
+        return delUser;
+    } catch (error) {
+        return ({ success: false, statusCode: 500, message: "internal server error", error: error.message });
+    }
+}
 
+module.exports = { addUser, getUser, updateUser, deletedUser };
