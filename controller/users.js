@@ -8,10 +8,9 @@ const { addUser, getUser, updateUser, deletedUser } = require('../utility/users'
 route.post('/adduser', async (req, res) => {
     try {
         const crtUser = await addUser(req.body);
-        res.status(crtUser?.statusCode).json({ crtUser });
-        //res.status(200).json(crtUser);
+        res.status(crtUser?.statusCode).json(crtUser);
     } catch (error) {
-        res.status(500).json({ success: false, message: "internal server error" });
+        res.status(statusCode).json({ success: false, message: "internal server error", error: error.message });
     }
 
 });
@@ -20,9 +19,9 @@ route.post('/adduser', async (req, res) => {
 route.get('/getuser', async (req, res) => {
     try {
         const userInf = await getUser();
-        res.status(userInf?.statusCode).json({ userInf })
+        res.status(userInf?.statusCode).json(userInf)
     } catch (error) {
-        res.status(500).json({ success: false, message: "internal server error" });
+        res.status(statusCode).json({ success: false, message: "internal server error", error: error.message });
     }
 });
 
@@ -30,10 +29,9 @@ route.get('/getuser', async (req, res) => {
 route.get('/getbyid/:id', async (req, res) => {
     try {
         let userdetail = await getUser(req?.params?.id)
-        //res.status(200).json({ userdetail });
-        res.status(userdetail?.statusCode).json({ userdetail })
+        res.status(userdetail?.statusCode).json(userdetail)
     } catch (error) {
-        res.status(500).json({ success: false, message: "internal server error" });
+        res.status(statusCode).json({ success: false, message: "internal server error", error: error.message });
     }
 });
 
@@ -41,9 +39,9 @@ route.get('/getbyid/:id', async (req, res) => {
 route.put('/updateuser/:id', async (req, res) => {
     try {
         let userdispaly = await updateUser(req?.params?.id, req?.body)
-        res.status(userdispaly?.statusCode).json({ userdispaly })
+        res.status(userdispaly?.statusCode).json(userdispaly)
     } catch (error) {
-        res.status(500).json({ success: false, message: "internal server error" });
+        res.status(statusCode).json({ success: false, message: "internal server error", error: error.message });
     }
 });
 
@@ -51,10 +49,9 @@ route.put('/updateuser/:id', async (req, res) => {
 route.delete('/delete/:id', async (req, res) => {
     try {
         let userdelete = await deletedUser(req?.params?.id)
-        //res.status(200).json({ userdelete });
-        res.status(userdelete?.statusCode).json({ userdelete })
+        res.status(userdelete?.statusCode).json(userdelete)
     } catch (error) {
-        res.status(500).json({ success: false, message: "internal server error" });
+        res.status(statusCode).json({ success: false, message: "internal server error", error: error.message });
     }
 })
 
