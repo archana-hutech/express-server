@@ -6,37 +6,37 @@ const users = require('../model/users');
 async function addUser(users) {
     try {
         const usersInfo = await db.Users.create(users)
-        return usersInfo.get();
+        return ({ success: true, statusCode: 200, message: "user created successfully", user: { usersInfo } });
     } catch (error) {
-        return ({ success: false, statusCode: 500, message: "internal server error", error: error.message });
+        return ({ success: false, statusCode: 404, message: "user not found", error: error.message });
     }
 }
 
 async function getUser(id = null) {
     try {
         const usersdetails = await db.Users.findAll({ where: id ? { id } : {} });
-        return usersdetails;
+        if (!usersdetails.length) throw "user not found";
+        return ({ success: true, statusCode: 200, message: "got user details", user: { usersdetails } });
     } catch (error) {
-        //console.log(error);
-        return ({ success: false, statusCode: 500, message: "internal server error", error: error.message });
+        return ({ success: false, statusCode: 404, message: "user not found", error: error.message });
     }
 }
 
 async function updateUser(id, user) {
     try {
         const updatedUser = await db.Users.update(user, { where: { id } });
-        return user;
+        return ({ success: true, statusCode: 200, message: "user update successful", user: { user } });
     } catch (error) {
-        return ({ success: false, statusCode: 500, message: "internal server error", error: error.message });
+        return ({ success: false, statusCode: 404, message: "user not found", error: error.message });
     }
 }
 
 async function deletedUser(id) {
     try {
         const delUser = await db.Users.destroy({ where: { id } });
-        return delUser;
+        return ({ success: true, statusCode: 200, message: "user deleted successfully" });
     } catch (error) {
-        return ({ success: false, statusCode: 500, message: "internal server error", error: error.message });
+        return ({ success: false, statusCode: 404, message: "user not found", error: error.message });
     }
 }
 

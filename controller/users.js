@@ -8,7 +8,8 @@ const { addUser, getUser, updateUser, deletedUser } = require('../utility/users'
 route.post('/adduser', async (req, res) => {
     try {
         const crtUser = await addUser(req.body);
-        res.status(200).json(crtUser);
+        res.status(crtUser?.statusCode).json({ crtUser });
+        //res.status(200).json(crtUser);
     } catch (error) {
         res.status(500).json({ success: false, message: "internal server error" });
     }
@@ -19,7 +20,7 @@ route.post('/adduser', async (req, res) => {
 route.get('/getuser', async (req, res) => {
     try {
         const userInf = await getUser();
-        res.status(200).json(userInf);
+        res.status(userInf?.statusCode).json({ userInf })
     } catch (error) {
         res.status(500).json({ success: false, message: "internal server error" });
     }
@@ -29,7 +30,8 @@ route.get('/getuser', async (req, res) => {
 route.get('/getbyid/:id', async (req, res) => {
     try {
         let userdetail = await getUser(req?.params?.id)
-        res.status(200).json({ userdetail });
+        //res.status(200).json({ userdetail });
+        res.status(userdetail?.statusCode).json({ userdetail })
     } catch (error) {
         res.status(500).json({ success: false, message: "internal server error" });
     }
@@ -39,7 +41,7 @@ route.get('/getbyid/:id', async (req, res) => {
 route.put('/updateuser/:id', async (req, res) => {
     try {
         let userdispaly = await updateUser(req?.params?.id, req?.body)
-        res.status(200).json({ userdispaly });
+        res.status(userdispaly?.statusCode).json({ userdispaly })
     } catch (error) {
         res.status(500).json({ success: false, message: "internal server error" });
     }
@@ -48,10 +50,9 @@ route.put('/updateuser/:id', async (req, res) => {
 //delete by id
 route.delete('/delete/:id', async (req, res) => {
     try {
-        console.log(req?.params?.id);
         let userdelete = await deletedUser(req?.params?.id)
-        res.status(200).json({ userdelete });
-        return userdelete;
+        //res.status(200).json({ userdelete });
+        res.status(userdelete?.statusCode).json({ userdelete })
     } catch (error) {
         res.status(500).json({ success: false, message: "internal server error" });
     }
