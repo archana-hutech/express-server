@@ -28,7 +28,7 @@ db.sequelize
 
 
 app.get("/", (req, res) => {
-    res.send("Welcome to localhost express server");
+    res.send("Welcome to express server");
 });
 
 app.use("/user", userroutes);
