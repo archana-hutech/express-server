@@ -6,7 +6,8 @@ const users = require('../model/users');
 async function addUser(users) {
     try {
         const usersInfo = await db.Users.create(users)
-        return ({ success: true, statusCode: 200, message: "user created successfully", user: { usersInfo } });
+        console.log(usersInfo)
+        return ({ success: true, statusCode: 200, message: "user created successfully", user: usersInfo.get() });
     } catch (error) {
         return ({ success: false, statusCode: 500, message: "internal server error", error: error.message });
     }
@@ -14,9 +15,11 @@ async function addUser(users) {
 
 async function getUser(id = null) {
     try {
-        const usersdetails = await db.Users.findAll({ where: id ? { id } : {} });
-        if (!usersdetails.length) throw "user not found";
-        return ({ success: true, statusCode: 200, message: "got user details", user: { usersdetails } });
+        const usersDetails = await db.Users.findAll({ where: id ? { id } : {} });
+        console.log(usersDetails);
+        if (usersDetails.length > 0) {
+            return ({ success: true, statusCode: 200, message: "got user details", user: usersDetails });
+        }
     } catch (error) {
         return ({ success: false, statusCode: 404, message: "user not found", error: error.message });
     }
@@ -25,7 +28,7 @@ async function getUser(id = null) {
 async function updateUser(id, user) {
     try {
         const updatedUser = await db.Users.update(user, { where: { id } });
-        return ({ success: true, statusCode: 200, message: "user update successful", user: { user } });
+        return ({ success: true, statusCode: 200, message: "user update successful", user: user });
     } catch (error) {
         return ({ success: false, statusCode: 500, message: "internal server error", error: error.message });
     }
