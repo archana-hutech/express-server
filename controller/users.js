@@ -2,7 +2,40 @@ let express = require('express');
 const { Users } = require('../model/db');
 const users = require('../model/users');
 let route = express.Router();
-const { addUser, getUser, updateUser, deletedUser } = require('../utility/users');
+const { addUser, getUser, updateUser, deletedUser, loginUtility } = require('../utility/users');
+const { authorizeUser } = require("../utility/auth");
+
+// signup user
+route.post("/signup", async (req, res) => {
+    try {
+        console.log("user signup.........");
+        let respose = await addUser(req.body);
+        res.status(respose?.statusCode).json(respose);
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            statusCode: 500,
+            message: "failed to register user",
+            error: error.message
+        });
+    }
+});
+
+route.post("/login", async (req, res) => {
+    try {
+        console.log("login success........");
+        const userExist = await loginUtility(req.body.email, req.body.password);
+        console.log(userExist);
+        res.status(userExist?.statusCode).json(userExist);
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            statusCode: 500,
+            message: "failed to login",
+            error: error.message
+        });
+    }
+})
 
 // post user
 route.post('/adduser', async (req, res) => {
