@@ -1,4 +1,5 @@
-let express = require('express');
+const express = require('express');
+const jwt = require("jsonwebtoken");
 const { Users } = require('../model/db');
 const users = require('../model/users');
 let route = express.Router();
@@ -25,7 +26,6 @@ route.post("/login", async (req, res) => {
     try {
         console.log("login success........");
         const userExist = await loginUtility(req.body.email, req.body.password);
-        console.log(userExist);
         res.status(userExist?.statusCode).json(userExist);
     } catch (error) {
         res.status(500).json({
@@ -38,9 +38,11 @@ route.post("/login", async (req, res) => {
 })
 
 // post user
-route.post('/adduser', async (req, res) => {
+route.post('/adduser', authorizeUser, async (req, res) => {
     try {
+        console.log("add user.........");
         const crtUser = await addUser(req.body);
+        //console.log(crtUser);
         res.status(crtUser?.statusCode).json(crtUser);
     } catch (error) {
         res.status(500).json({ success: false, message: "internal server error", error: error.message });
