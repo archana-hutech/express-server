@@ -22,7 +22,7 @@ db.sequelize
             );
         } else {
             console.error(
-                `express server connected to "${env?.SERVERHOST || "NA"}" database ${env?.DBNAME || "NA"
+                `express server is not cnnected to "${env?.SERVERHOST || "NA"}" database ${env?.DBNAME || "NA"
                 }`
             );
         }
