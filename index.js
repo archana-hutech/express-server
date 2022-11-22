@@ -1,23 +1,35 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const app = express();
 let db = require("./model/db");
 const userroutes = require("./controller/users");
 require("dotenv").config();
 const port = process?.env?.port || 3001;
 
+app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ limit: "2mb", extended: true }));
+
 
 db.sequelize
     .authenticate()
-    .then(() => {
-        console.error(
-            `express server connected to "${process?.env?.SERVERHOST || "NA"
-            }" database "${process?.env?.DBNAME || "NA"}"`
-        );
+    .then((error) => {
+        if (!error) {
+            console.error(
+                `express server connected to "${process?.env?.SERVERHOST || "NA"
+                }" database "${process?.env?.DBNAME || "NA"}"`
+            );
+        } else {
+            console.error(
+                `express server is not cnnected to "${env?.SERVERHOST || "NA"}" database ${env?.DBNAME || "NA"
+                }`
+            );
+        }
 
         db.sequelize.sync();
-
+        //{force: true}
+        //{alter: true}
     })
     .catch((err) => {
         console.error(
